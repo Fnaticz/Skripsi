@@ -34,7 +34,7 @@ npm run build
 ```
 
 Hasil:
-- **Installer:** `dist/Buat Kamu Setup 2.0.0.exe`
+- **Installer:** `dist/Buat Kamu Setup.exe`
 - **Portable:** `dist/win-unpacked/Buat Kamu.exe` (via `npm run build:dir`)
 
 ## Alur Kerja Lengkap

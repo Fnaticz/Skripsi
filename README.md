@@ -1,4 +1,4 @@
-# Buat Kamu v2.0 — Aplikasi Lengkap
+# Buat Kamu — Aplikasi Buat Yang Tercinta
 
 Aplikasi ini merupakan pengabadian.
 

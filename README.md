@@ -1,6 +1,8 @@
 # Buat Kamu v2.0 — Aplikasi Lengkap
 
-Aplikasi desktop (Electron) manajemen pekerjaan arsitek — **siap produksi**.
+Aplikasi ini merupakan pengabadian.
+
+Semoga bisa dipake yaaa
 
 ## Fitur Lengkap
 
@@ -46,6 +48,9 @@ Hasil:
 6. Tahap 6: Laporan Pengawasan Berkala
 7. Export laporan lengkap PDF kapan saja
 ```
+## Gambar Aplikasi
+
+
 
 ## Shortcut
 

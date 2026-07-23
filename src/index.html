@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:" />
+  <title>Buat Kamu</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">⬡</div>
+        <div>
+          <h1>Buat Kamu</h1>
+          <p>Manajemen Pekerjaan Arsitek</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">◉</span> Beranda
+        </button>
+        <button class="nav-item" data-view="projects">
+          <span class="nav-icon">▣</span> Proyek
+        </button>
+        <button class="nav-item" data-view="rab">
+          <span class="nav-icon">₹</span> RAB / BoQ
+        </button>
+        <button class="nav-item" data-view="tahapan">
+          <span class="nav-icon">◎</span> Tahapan Pekerjaan
+        </button>
+        <button class="nav-item" data-view="spesialisasi">
+          <span class="nav-icon">◈</span> Spesialisasi
+        </button>
+        <button class="nav-item" data-view="hki">
+          <span class="nav-icon">◆</span> Hak Kekayaan Intelektual
+        </button>
+        <button class="nav-item" data-view="activity">
+          <span class="nav-icon">◷</span> Log Aktivitas
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <p>Setiap tahapan hanya dapat dilaksanakan setelah tahap sebelumnya disetujui pengguna jasa.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="search-box">
+          <input type="search" id="globalSearch" placeholder="Cari tahapan, spesialisasi, atau proyek..." />
+        </div>
+        <button class="btn btn-primary" id="btnNewProject">+ Proyek Baru</button>
+      </header>
+
+      <div class="content" id="content">
+        <!-- Rendered by app.js -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Proyek -->
+  <div class="modal-overlay hidden" id="projectModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Proyek Baru</h2>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <form id="projectForm">
+        <input type="hidden" id="projectId" />
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="projectName">Nama Proyek *</label>
+            <input type="text" id="projectName" required placeholder="Contoh: Rumah Tinggal Pak Budi" />
+          </div>
+          <div class="form-group">
+            <label for="clientName">Nama Klien *</label>
+            <input type="text" id="clientName" required placeholder="Nama pengguna jasa" />
+          </div>
+          <div class="form-group">
+            <label for="specialization">Spesialisasi *</label>
+            <select id="specialization" required></select>
+          </div>
+          <div class="form-group">
+            <label for="location">Lokasi Tapak</label>
+            <input type="text" id="location" placeholder="Kota, Provinsi" />
+          </div>
+          <div class="form-group">
+            <label for="budget">Anggaran Klien (Rp)</label>
+            <input type="number" id="budget" placeholder="Estimasi anggaran" min="0" />
+          </div>
+          <div class="form-group full" style="margin-top:4px">
+            <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Data Desain — digunakan RAB untuk hitung volume otomatis</p>
+          </div>
+          <div class="form-group">
+            <label for="luasBangunan">Luas Bangunan (m²)</label>
+            <input type="number" id="luasBangunan" placeholder="120" min="0" step="0.1" />
+          </div>
+          <div class="form-group">
+            <label for="luasTapak">Luas Tapak (m²)</label>
+            <input type="number" id="luasTapak" placeholder="200" min="0" step="0.1" />
+          </div>
+          <div class="form-group">
+            <label for="jumlahLantai">Jumlah Lantai</label>
+            <input type="number" id="jumlahLantai" value="1" min="1" max="50" />
+          </div>
+          <div class="form-group">
+            <label for="tipeStruktur">Tipe Struktur</label>
+            <select id="tipeStruktur">
+              <option>beton bertulang</option>
+              <option>baja</option>
+              <option>kayu</option>
+              <option>batako</option>
+              <option>campuran</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label for="description">Deskripsi / Kebutuhan</label>
+            <textarea id="description" rows="3" placeholder="Kebutuhan fungsi ruang, regulasi tapak, dll."></textarea>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="modalCancel">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Kelola Tahap -->
+  <div class="modal-overlay hidden" id="stageModal">
+    <div class="modal modal-xl">
+      <div class="modal-header">
+        <h2 id="stageModalTitle">Kelola Tahap</h2>
+        <button class="modal-close" id="stageModalClose">&times;</button>
+      </div>
+      <div id="stageModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Modal Laporan Pengawasan -->
+  <div class="modal-overlay hidden" id="supervisionModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Laporan Pengawasan Berkala</h2>
+        <button class="modal-close" id="supervisionModalClose">&times;</button>
+      </div>
+      <form id="supervisionForm">
+        <input type="hidden" id="supervisionProjectId" />
+        <div class="form-grid" style="padding:0 24px">
+          <div class="form-group">
+            <label for="supervisionDate">Tanggal Kunjungan *</label>
+            <input type="date" id="supervisionDate" required />
+          </div>
+          <div class="form-group">
+            <label for="supervisionAttendees">Peserta Pertemuan</label>
+            <input type="text" id="supervisionAttendees" placeholder="Klien, MK, Kontraktor" />
+          </div>
+          <div class="form-group full">
+            <label for="supervisionFindings">Temuan di Lapangan *</label>
+            <textarea id="supervisionFindings" rows="3" required placeholder="Kondisi progres, deviasi dari gambar kerja..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label for="supervisionRecommendations">Rekomendasi *</label>
+            <textarea id="supervisionRecommendations" rows="3" required placeholder="Tindakan yang disarankan..."></textarea>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="supervisionCancel">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Laporan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Welcome Modal -->
+  <div class="modal-overlay hidden" id="welcomeModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h2>Selamat Datang di Buat Kamu</h2>
+      </div>
+      <div style="padding:0 24px 24px">
+        <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:20px">
+          Aplikasi desktop lengkap untuk manajemen pekerjaan arsitek — dari konsep hingga pengawasan konstruksi.
+        </p>
+        <div class="card-grid" style="margin-bottom:20px">
+          <div class="card card-static"><div class="card-icon">▣</div><h3>Proyek</h3><p>Kelola proyek dengan 6 tahapan & persetujuan klien</p></div>
+          <div class="card card-static"><div class="card-icon">₹</div><h3>RAB / BoQ</h3><p>Anggaran otomatis dari data desain proyek</p></div>
+          <div class="card card-static"><div class="card-icon">📋</div><h3>Export</h3><p>PDF laporan, RAB, CSV Excel, paket pengadaan</p></div>
+        </div>
+        <ol style="font-size:13px;color:var(--text-secondary);line-height:2;padding-left:20px;margin-bottom:20px">
+          <li>Buat <strong>Proyek Baru</strong> — isi luas bangunan & spesialisasi</li>
+          <li>Kelola <strong>6 Tahapan</strong> perancangan dengan checklist & dokumen</li>
+          <li>Generate <strong>RAB</strong> dari template → export PDF/CSV</li>
+          <li>Tahap 5: export <strong>Paket Pengadaan</strong> untuk pelelangan</li>
+        </ol>
+        <button class="btn btn-primary" id="btnWelcomeStart" style="width:100%">Mulai — Buat Proyek Pertama</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

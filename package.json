@@ -1,0 +1,63 @@
+{
+  "name": "buat-kamu",
+  "version": "2.0.0",
+  "description": "Buat Kamu — aplikasi desktop manajemen pekerjaan arsitek",
+  "main": "main.js",
+  "author": "Buat Kamu",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --enable-logging",
+    "build": "electron-builder --win",
+    "build:dir": "electron-builder --win dir"
+  },
+  "keywords": [
+    "arsitektur",
+    "desktop",
+    "electron",
+    "rab"
+  ],
+  "build": {
+    "appId": "com.buatkamu.app",
+    "productName": "Buat Kamu",
+    "copyright": "Copyright © 2026 Buat Kamu",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "report-builder.js",
+      "report-data.js",
+      "csv-export.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signAndEditExecutable": false
+    },
+    "forceCodeSigning": false,
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerLanguages": [
+        "en_US",
+        "id_ID"
+      ],
+      "language": "1033",
+      "shortcutName": "Buat Kamu"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  }
+}
